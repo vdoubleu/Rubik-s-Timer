@@ -10,12 +10,10 @@ def send_time():
     def add_header(response):
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
-
-    print(request.form)
     
     post_time = request.form["time"]
     post_id = request.form["id"]
-    
+   
     #times_coll.insert_one({"id":post_id, "time":post_time})
     if times_coll.find_one({"id":post_id}) is not None:
         times_coll.update_one({"id":post_id}, {"$push":{"time": post_time}})
@@ -25,18 +23,20 @@ def send_time():
     return jsonify({"id":post_id, "time":post_time})
 
 
-#@app.route('/getTime/', methods=['GET'])
+@app.route('/getTime/', methods=['GET'])
 def get_time():
-    #@after_this_request
-    #def add_header(response):
-    #    response.headers.add('Access-Control-Allow-Origin', '*')
-    #    return response
+    @after_this_request
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
-    get_id = request.form["id"]
+    get_id = request.args["id"]
+    get_data = times_coll.find_one({"id":get_id})
 
-    get_data = collection.find_one({"id":get_id})
-
-    return get_data
+    if get_data is not None:
+        return jsonify({"time": get_data["time"]})
+    else:
+        return jsonify(None)
 
 #@app.route('/removeLastTime/', methods=['GET'])
 def remove_last_time():

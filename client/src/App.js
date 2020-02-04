@@ -27,25 +27,27 @@ function sendTime(time){
   $.ajax({
       type: "POST",
       url: URL,
-      data: {"id":123, "time": 123},
+      data: {"id": userId, "time": time},
       success: function(data){
          alert(JSON.stringify(data));
-         return out;
+         
+         //return out;
       }});
 
 }
 
 function getTimes(){
-   var URL = "http://127.0.0.1:5000/sendTime/";
+   var URL = "http://127.0.0.1:5000/getTime/";
    var out;
+
 
    $.ajax({
       type: "GET",
       url: URL,
-      data: {"id":123},
+      data: {"id": userId},
       success: function(data){
          alert(JSON.stringify(data));
-         return out;
+         //return out;
       }});
 
 }
@@ -139,8 +141,12 @@ document.body.onkeyup = function(e){
       <input type="text" id="userin"></input>
       <p> currently using id: </p> <p id="curruser"> defuser </p>
 
+      <button onClick={getTimes}> get times </button>
+
    </div>  
-	</Container>
+	   
+     
+     </Container>
   );
 }
 
