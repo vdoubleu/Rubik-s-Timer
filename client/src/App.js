@@ -2,31 +2,58 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container} from 'react-bootstrap';
-
-var fs = require("fs");
-
+import $ from "jquery";
 
 var timerOn = false;
-var currTime;
 var startTime;
 var updatedTime;
 var difference;
 var tInterval;
 var savedTime;
-var paused = 0;
 var running = 0;
 
 var readyTimerOn = false;
 var prepped = false;
 
 
+var userId = "defuser";
+
 function App() {
+
+function sendTime(time){
+  var URL = "http://127.0.0.1:5000/sendTime/";
+  var out;
+ 
+  $.ajax({
+      type: "POST",
+      url: URL,
+      data: {"id":123, "time": 123},
+      success: function(data){
+         alert(JSON.stringify(data));
+         return out;
+      }});
+
+}
+
+function getTimes(){
+   var URL = "http://127.0.0.1:5000/sendTime/";
+   var out;
+
+   $.ajax({
+      type: "GET",
+      url: URL,
+      data: {"id":123},
+      success: function(data){
+         alert(JSON.stringify(data));
+         return out;
+      }});
+
+}
 
 function startTimer(){
   if(!running){
     startTime = new Date().getTime();
     tInterval = setInterval(getShowTime, 1); 
-    paused = 0;
     running = 1;
   }
 }
@@ -35,7 +62,6 @@ function resetTimer(){
   clearInterval(tInterval);
   savedTime = 0;
   difference = 0;
-  paused = 0;
   running = 0;
 }
 
@@ -57,8 +83,8 @@ function getShowTime(){
 }
 
 document.body.onkeypress = function(e){
-   if(e.keyCode == 32){
-      if(!readyTimerOn && timerOn == false){
+   if(e.keyCode === 32){
+      if(!readyTimerOn && timerOn === false){
          readyTimerOn = true;
          document.getElementById("time").style.color = "red";
 
@@ -73,18 +99,27 @@ document.body.onkeypress = function(e){
 }
 
 document.body.onkeyup = function(e){
-   if(e.keyCode == 32){
+   if(e.keyCode === 32){
       document.getElementById("time").style.color = "white";
       readyTimerOn = false;
 
-	   if(timerOn == false && prepped == true){
+	   if(timerOn === false && prepped === true){
          timerOn = true;        
 		   startTimer();
 	   } else {
+         sendTime(document.getElementById("time").innerHTML);
          prepped = false;
          timerOn = false;
 		   resetTimer();
 	   }
+   }
+
+   if(e.keyCode === 13){
+      var textBox = document.getElementById("userin");
+
+      userId = textBox.value;
+      document.getElementById("curruser").innerHTML = textBox.value;
+      textBox.value = "";
    }
 }
 
@@ -99,6 +134,12 @@ document.body.onkeyup = function(e){
     <div className="time-box">
 	<p id="time">0:000</p>
 	</div>
+
+   <div>
+      <input type="text" id="userin"></input>
+      <p> currently using id: </p> <p id="curruser"> defuser </p>
+
+   </div>  
 	</Container>
   );
 }
