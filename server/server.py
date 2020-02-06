@@ -32,22 +32,46 @@ def get_time():
 
     get_id = request.args["id"]
     get_data = times_coll.find_one({"id":get_id})
+    times = get_data["time"]
+    
+    adjusted_times = []
+
+    count = 0
+    for x in adjusted_times:
+        adjusted_times.push({count:x})
+        count++
 
     if get_data is not None:
         return jsonify({"time": get_data["time"]})
     else:
         return jsonify(None)
 
-#@app.route('/removeLastTime/', methods=['GET'])
+@app.route('/removeLast/', methods=['POST'])
 def remove_last_time():
-    #@after_this_request
-    #def add_header(response):
-    #    response.headers.add('Access-Control-Allow-Origin', '*')
-    #    return response
+    @after_this_request
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
-    
+    post_id = request.form["id"]
 
-    return {"hi":"hi"}
+    times_coll.update_one({"id":post_id}, {"$pop":{"time": 1}})
+
+
+    return jsonify({"data":"removed last"})
+
+@app.route('/removeAll/', methods=['POST'])
+def remove_all():
+    @after_this_request
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+
+    post_id = request.form["id"]
+
+    times_coll.update_one({"id":post_id}, {"$set": {"time": []}})    
+
+    return jsonify({"data":"removed all"})
 
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)
