@@ -22,7 +22,6 @@ def send_time():
     
     return jsonify({"id":post_id, "time":post_time})
 
-
 @app.route('/getTime/', methods=['GET'])
 def get_time():
     @after_this_request
@@ -37,12 +36,12 @@ def get_time():
     adjusted_times = []
 
     count = 0
-    for x in adjusted_times:
-        adjusted_times.push({count:x})
-        count++
+    for x in times:
+        adjusted_times.append({"num":str(count), "solvetime":x})
+        count += 1 
 
     if get_data is not None:
-        return jsonify({"time": get_data["time"]})
+        return jsonify({"adjtime": adjusted_times, "regtime": times})
     else:
         return jsonify(None)
 
