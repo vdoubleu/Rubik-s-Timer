@@ -32,7 +32,7 @@ def get_time():
     get_id = request.args["id"]
     get_data = times_coll.find_one({"id":get_id})
     times = get_data["time"]
-    
+
     adjusted_times = []
 
     count = 0

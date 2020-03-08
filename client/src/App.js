@@ -17,12 +17,12 @@ var running = 0;
 var readyTimerOn = false;
 var prepped = false;
 
-var times = [];//[{"num":0, "solvetime":12}, {"num":1, "solvetime": 11}, {"num":2, "solvetime":10}];
+//var times = [{"num":0, "solvetime":12}, {"num":1, "solvetime": 11}, {"num":2, "solvetime":10}];
 
 var userId = "defuser";
 
 function App() {
-const [times, setTime] = useState([]);
+const [times, setTimes] = useState(getTimes());
 
 function sendTime(time){
   var URL = "http://127.0.0.1:5000/sendTime/";
@@ -34,8 +34,6 @@ function sendTime(time){
       data: {"id": userId, "time": time},
       success: function(data){
          //alert(JSON.stringify(data));
-         
-         //return out;
       }});
 
 }
@@ -49,14 +47,11 @@ function getTimes(){
       url: URL,
       data: {"id": userId},
       success: function(data){
-         return JSON.parse(JSON.stringify(data)).adjtime;
-        // console.log( [{"num":0, "solvetime":12}, {"num":1, "solvetime": 11}, {"num":2, "solvetime":10}])
-
-        //return [{"num":0, "solvetime":12}, {"num":1, "solvetime": 11}, {"num":2, "solvetime":10}];
-      
-         //alert(JSON.stringify(times[0]));
-         //document.getElementById('timelst').innerHTML = JSON.stringify(times[0]);
-         //return out;
+         
+         var res = JSON.parse(JSON.stringify(data))
+         document.getElementById('timelst').innerHTML = res.regtime
+        
+         setTimes(res.adjtime)
       }});
 
          console.log(foo);
@@ -71,8 +66,9 @@ function removeLastTime(){
       url: URL,
       data: {"id": userId},
       success: function(data){
-         alert("deleted last");
+         //alert("deleted last");
          //return out;
+         getTimes();
       }});
 }
 
@@ -85,8 +81,9 @@ function removeAll(){
       url: URL,
       data: {"id": userId},
       success: function(data){
-         alert("deleted all");
+         //alert("deleted all");
          //return out;
+         getTimes();
       }});
 }
 
@@ -163,6 +160,8 @@ document.body.onkeyup = function(e){
          prepped = false;
          timerOn = false;
 		   resetTimer();
+
+         getTimes();
 	   }
    }
 
@@ -194,13 +193,16 @@ document.body.onkeyup = function(e){
       
       <div class="container" className="bottom-box">
          <div class="row">
-            <button type="button" class="btn btn-dark" onClick={/*getTimes*/ ()=>setTime(getTimes())} id="actionbtn"> get times </button>
+            <button type="button" class="btn btn-dark" onClick={getTimes/*()=>setTime(getTimes())*/} id="actionbtn"> get times </button>
             <button type="button" class="btn btn-dark" onClick={removeLastTime} id="actionbtn"> delete last </button>
             <button type="button" class="btn btn-dark" onClick={removeAll} id="actionbtn"> delete all </button>
          </div>
       </div>
-      <Graph data={times}/>
 
+     <Graph data={times}/>
+
+       <p id="timelsttxt"> times: </p>
+         <p id="timelst"> __ </p>
 
    </div>  
    
