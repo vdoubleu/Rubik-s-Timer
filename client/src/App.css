@@ -75,4 +75,6 @@
 
 #timelst{
    color:white;
+   max-width:500px;
+   word-wrap: break-word;
 }

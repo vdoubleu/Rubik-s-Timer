@@ -1,0 +1,11 @@
+#timelsttxt{
+   text-align: center;
+   color:white;
+}
+
+#timelst{
+   text-align:center;
+   color:white;
+   max-width:500px;
+   word-wrap: break-word;
+}

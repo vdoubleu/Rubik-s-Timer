@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {LineChart, Line, CartesianGrid, XAxis, YAxis} from 'recharts';
 import $ from "jquery";
 import Graph from "./components/graph";
-
+import StatBox from "./components/stats";
 
 var timerOn = false;
 var startTime;
@@ -22,7 +22,8 @@ var prepped = false;
 var userId = "defuser";
 
 function App() {
-const [times, setTimes] = useState(getTimes());
+const [times, setTimes] = useState([]);
+const [dispTimes, setDispTimes] = useState("");
 
 function sendTime(time){
   var URL = "http://127.0.0.1:5000/sendTime/";
@@ -49,13 +50,17 @@ function getTimes(){
       success: function(data){
          
          var res = JSON.parse(JSON.stringify(data))
-         document.getElementById('timelst').innerHTML = res.regtime
-        
-         setTimes(res.adjtime)
-      }});
 
-         console.log(foo);
-         }
+         var dispOut = "";
+         var timeLst = res.regtime;
+         
+         for(var i = 0; i < timeLst.length; i++)
+            dispOut = dispOut + timeLst[i].toString() + " ";
+         
+         setTimes(res.adjtime)
+         setDispTimes(dispOut);
+   }});
+}
 
 function removeLastTime(){
    var URL = "http://127.0.0.1:5000/removeLast/";
@@ -161,13 +166,17 @@ document.body.onkeyup = function(e){
          timerOn = false;
 		   resetTimer();
 
-         getTimes();
+        getTimes();
 	   }
    }
 
    if(e.keyCode === 13){
       userInput();
    }
+}
+
+window.onload = function(){
+   getTimes();
 }
 
   return (
@@ -193,7 +202,7 @@ document.body.onkeyup = function(e){
       
       <div class="container" className="bottom-box">
          <div class="row">
-            <button type="button" class="btn btn-dark" onClick={getTimes/*()=>setTime(getTimes())*/} id="actionbtn"> get times </button>
+            <button type="button" class="btn btn-dark" onClick={getTimes} id="actionbtn"> get times </button>
             <button type="button" class="btn btn-dark" onClick={removeLastTime} id="actionbtn"> delete last </button>
             <button type="button" class="btn btn-dark" onClick={removeAll} id="actionbtn"> delete all </button>
          </div>
@@ -201,9 +210,7 @@ document.body.onkeyup = function(e){
 
      <Graph data={times}/>
 
-       <p id="timelsttxt"> times: </p>
-         <p id="timelst"> __ </p>
-
+     <StatBox data={dispTimes}/>
    </div>  
    
 </div>
