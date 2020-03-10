@@ -4,4 +4,4 @@ This is an improved version of my original slap together timer. I maintained muc
 
 To run, you simply need to run the command `num run dev` to start everything. 
 
-
+![](other/pic.png)
