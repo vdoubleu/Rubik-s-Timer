@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, after_this_request
 from pymongo import MongoClient
 from pprint import pprint
+import logging
 
 app = Flask(__name__)
 
@@ -72,9 +73,27 @@ def remove_all():
 
     return jsonify({"data":"removed all"})
 
+@app.route('/resetTimes/', methods=['POST'])
+def set_times():
+    @after_this_request
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+
+    post_id = request.form["id"]
+    new_times = request.form["newtimes"]
+
+    logging.warning(new_times)
+    #print(new_times)
+
+    times_coll.update_one({"id":post_id}, {"$set": {"time": new_times}})
+   
+    #return jsonify({"data": new_times})
+    return jsonify({"data": "boop"})
+
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)
     times_coll = client.times_database.times_collection
 
     
-    app.run()
+    app.run(debug=True)

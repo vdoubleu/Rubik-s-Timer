@@ -17,8 +17,6 @@ var running = 0;
 var readyTimerOn = false;
 var prepped = false;
 
-//var times = [{"num":0, "solvetime":12}, {"num":1, "solvetime": 11}, {"num":2, "solvetime":10}];
-
 var userId = "defuser";
 
 function App() {
@@ -64,7 +62,6 @@ function getTimes(){
 
 function removeLastTime(){
    var URL = "http://127.0.0.1:5000/removeLast/";
-   var out;
 
    $.ajax({
       type:"POST",
@@ -72,14 +69,12 @@ function removeLastTime(){
       data: {"id": userId},
       success: function(data){
          //alert("deleted last");
-         //return out;
          getTimes();
       }});
 }
 
 function removeAll(){
    var URL = "http://127.0.0.1:5000/removeAll/";
-   var out;
 
    $.ajax({
       type:"POST",
@@ -87,8 +82,19 @@ function removeAll(){
       data: {"id": userId},
       success: function(data){
          //alert("deleted all");
-         //return out;
          getTimes();
+      }});
+}
+
+function resetTimes(newTimes){
+   var URL = "http://127.0.0.1:5000/resetTimes/";
+
+   $.ajax({
+      type:"POST",
+      url: URL,
+      data: {"id": userId, "newtimes": JSON.stringify(newTimes)},
+      success: function(data){
+         alert(data);
       }});
 }
 
@@ -128,7 +134,8 @@ function getShowTime(){
 }
 
 document.body.onkeypress = function(e){
-   if(e.keyCode === 32){
+   if(e.keyCode === 32 && e.target != document.getElementById("userin") && e.target != document.getElementById("timeImportArea")){
+      e.preventDefault();
       if(!readyTimerOn && timerOn === false){
          readyTimerOn = true;
          document.getElementById("time").style.color = "red";
@@ -140,6 +147,7 @@ document.body.onkeypress = function(e){
             }
          }, 500);
       }
+      getTimes();
    }
 }
 
@@ -149,29 +157,45 @@ function userInput(){
     userId = textBox.value;
     document.getElementById("curruser").innerHTML = textBox.value;
     textBox.value = "";
+    getTimes();
+}
 
+function importTime(){
+   var textBox = document.getElementById("timeImportArea");
+   var importData = textBox.value.split(',').map(Number);
+ 
+   alert(JSON.stringify(importData));
+   textBox.value = "";
+   resetTimes(importData);
+   getTimes();
 }
 
 document.body.onkeyup = function(e){
    if(e.keyCode === 32){
-      document.getElementById("time").style.color = "white";
-      readyTimerOn = false;
+      if(e.target != document.getElementById("userin") && e.target != document.getElementById("timeImportArea")){
+         document.getElementById("time").style.color = "white";
+         readyTimerOn = false;
 
-	   if(timerOn === false && prepped === true){
-         timerOn = true;        
-		   startTimer();
-	   } else {
-         sendTime(document.getElementById("time").innerHTML);
-         prepped = false;
-         timerOn = false;
-		   resetTimer();
-
-        getTimes();
-	   }
+         if(timerOn === false && prepped === true){
+            timerOn = true;        
+            startTimer();
+         } else if(timerOn === false && prepped === false){ 
+            timerOn = false;
+         } else {
+            sendTime(document.getElementById("time").innerHTML);
+            prepped = false;
+            timerOn = false;
+            resetTimer();
+	      }
+         setTimeout(function () {getTimes();}, 50);
+      }
    }
-
-   if(e.keyCode === 13){
-      userInput();
+   if(e.keyCode === 13 ){
+      if(e.target == document.getElementById("userin")){
+         userInput();
+      } else if (e.target == document.getElementById("timeImportArea")){
+         importTime();
+      }
    }
 }
 
@@ -187,7 +211,7 @@ window.onload = function(){
       </header>
    </div>
 
-   <div class="container" className="time-box">
+   <div class="container" className="time-box" id="timer">
 	      <p id="time">0:000</p>
    </div>
 
@@ -208,9 +232,16 @@ window.onload = function(){
          </div>
       </div>
 
-     <Graph data={times}/>
+      <Graph data={times}/>
+      <StatBox data={dispTimes}/>
 
-     <StatBox data={dispTimes}/>
+
+      <div class="form-group">
+         <textarea class="form-control" id="timeImportArea" rows="3"></textarea>
+
+         <button type="button" class="btn btn-dark" id="actionbtn" onClick={importTime}> import times </button>
+      </div>
+
    </div>  
    
 </div>
