@@ -164,7 +164,7 @@ function importTime(){
    var textBox = document.getElementById("timeImportArea");
    var importData = textBox.value.split(',').map(Number);
  
-   alert(JSON.stringify(importData));
+   alert(importData);
    textBox.value = "";
    resetTimes(importData);
    getTimes();

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, after_this_request
 from pymongo import MongoClient
 from pprint import pprint
 import logging
+import json
 
 app = Flask(__name__)
 
@@ -15,7 +16,6 @@ def send_time():
     post_time = request.form["time"]
     post_id = request.form["id"]
    
-    #times_coll.insert_one({"id":post_id, "time":post_time})
     if times_coll.find_one({"id":post_id}) is not None:
         times_coll.update_one({"id":post_id}, {"$push":{"time": post_time}})
     else:
@@ -81,15 +81,10 @@ def set_times():
         return response
 
     post_id = request.form["id"]
-    new_times = request.form["newtimes"]
-
-    logging.warning(new_times)
-    #print(new_times)
-
+    new_times = json.loads(request.form["newtimes"])
     times_coll.update_one({"id":post_id}, {"$set": {"time": new_times}})
    
-    #return jsonify({"data": new_times})
-    return jsonify({"data": "boop"})
+    return jsonify({"data": new_times})
 
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)

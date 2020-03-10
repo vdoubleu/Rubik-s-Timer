@@ -8,6 +8,6 @@ Start and stop the timer with spacebar. (The timer is setup in competition forma
 
 You can have different users and have different times associated with each user. To change users, simply type in the name of the user you wish to swap to. By default, it is set to `defuser`. (default user)
 
-You can import existing times by simply pasting the batch in the text box in bottom. 
+You can import existing times by simply pasting the batch in the text box in bottom. Imported times should be in CSV format.
 
 ![](other/pic.png)
