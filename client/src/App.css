@@ -78,3 +78,8 @@
    max-width:500px;
    word-wrap: break-word;
 }
+
+#timeImportArea{
+   width: 500px;
+   height: 200px;
+}

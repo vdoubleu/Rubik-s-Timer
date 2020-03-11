@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {LineChart, Line, CartesianGrid, XAxis, YAxis} from 'recharts';
 import $ from "jquery";
 import Graph from "./components/graph";
 import StatBox from "./components/stats";
@@ -25,7 +24,6 @@ const [dispTimes, setDispTimes] = useState("");
 
 function sendTime(time){
   var URL = "http://127.0.0.1:5000/sendTime/";
-  var out;
  
   $.ajax({
       type: "POST",
@@ -39,9 +37,8 @@ function sendTime(time){
 
 function getTimes(){
    var URL = "http://127.0.0.1:5000/getTime/";
-   var out;
 
-   var foo = $.ajax({
+   $.ajax({
       type: "GET",
       url: URL,
       data: {"id": userId},
@@ -55,7 +52,7 @@ function getTimes(){
          for(var i = 0; i < timeLst.length; i++)
             dispOut = dispOut + timeLst[i].toString() + " ";
          
-         setTimes(res.adjtime)
+         setTimes(res.adjtime);
          setDispTimes(dispOut);
    }});
 }
@@ -94,7 +91,7 @@ function resetTimes(newTimes){
       url: URL,
       data: {"id": userId, "newtimes": JSON.stringify(newTimes)},
       success: function(data){
-         alert(data);
+         //alert(data);
       }});
 }
 
@@ -134,7 +131,7 @@ function getShowTime(){
 }
 
 document.body.onkeypress = function(e){
-   if(e.keyCode === 32 && e.target != document.getElementById("userin") && e.target != document.getElementById("timeImportArea")){
+   if(e.keyCode === 32 && e.target !== document.getElementById("userin") && e.target !== document.getElementById("timeImportArea")){
       e.preventDefault();
       if(!readyTimerOn && timerOn === false){
          readyTimerOn = true;
@@ -146,8 +143,8 @@ document.body.onkeypress = function(e){
                prepped = true; 
             }
          }, 500);
+         getTimes();
       }
-      getTimes();
    }
 }
 
@@ -164,7 +161,6 @@ function importTime(){
    var textBox = document.getElementById("timeImportArea");
    var importData = textBox.value.split(',').map(Number);
  
-   alert(importData);
    textBox.value = "";
    resetTimes(importData);
    getTimes();
@@ -172,7 +168,7 @@ function importTime(){
 
 document.body.onkeyup = function(e){
    if(e.keyCode === 32){
-      if(e.target != document.getElementById("userin") && e.target != document.getElementById("timeImportArea")){
+      if(e.target !== document.getElementById("userin") && e.target !== document.getElementById("timeImportArea")){
          document.getElementById("time").style.color = "white";
          readyTimerOn = false;
 
@@ -191,9 +187,9 @@ document.body.onkeyup = function(e){
       }
    }
    if(e.keyCode === 13 ){
-      if(e.target == document.getElementById("userin")){
+      if(e.target === document.getElementById("userin")){
          userInput();
-      } else if (e.target == document.getElementById("timeImportArea")){
+      } else if (e.target === document.getElementById("timeImportArea")){
          importTime();
       }
    }
@@ -237,8 +233,7 @@ window.onload = function(){
 
 
       <div class="form-group">
-         <textarea class="form-control" id="timeImportArea" rows="3"></textarea>
-
+         <textarea class="form-control" id="timeImportArea" rows="3" placeholder="Input times here to import them"></textarea>
          <button type="button" class="btn btn-dark" id="actionbtn" onClick={importTime}> import times </button>
       </div>
 

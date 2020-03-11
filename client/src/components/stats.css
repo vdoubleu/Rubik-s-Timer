@@ -1,12 +1,15 @@
 #timelsttxt{
+   font-size: 20px;
    margin-top: 30px;
    text-align: center;
    color:white;
 }
 
 #timelst{
+   font-size: 15px;
    text-align:center;
    color:white;
-   max-width:500px;
+   max-width: 750px;
    word-wrap: break-word;
+   margin-bottom: 30px;
 }

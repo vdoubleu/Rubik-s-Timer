@@ -1,6 +1,6 @@
 # Rubik-s-Timer
 
-This is an improved version of my original slap together timer. I maintained much of the same functionality while keeping a simple and clean look. The front-end is made using ReactJS with some help from Bootstrap. The entire setup is be based around a Flask framework that takes and records times to a Mongo database. Graphing was done using Recharts and should update dynamically.
+This is an improved version of my original [slap together timer](https://github.com/vdoubleu/slap-together-timer). I maintained much of the same functionality while keeping a simple and clean look. The front-end is made using ReactJS with some help from Bootstrap. The entire setup is be based around a Flask framework that takes and records times to a Mongo database. Graphing was done using Recharts and should update dynamically.
 
 To run, you simply need to run the command `num run dev` to start everything. 
 
