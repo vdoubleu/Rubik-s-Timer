@@ -4,7 +4,7 @@ This is an improved version of my original [slap together timer](https://github.
 
 The front-end is made using ReactJS with some help from Bootstrap. Ajax was used to make API calls to a Flask server that takes and records times to a Mongo database. Graphing was done using Recharts and should update dynamically.
 
-To run, you simply need to run the command `num run dev` to start everything. 
+To run, you simply need to run the command `num run dev` inside the client directory to start everything. You can also use docker-compose to run everything however you will need to make sure you have corsdisabled for it to function.
 
 Start and stop the timer with spacebar. (The timer is setup in competition format, so be sure to hold it down until it turns green  before you start)
 
