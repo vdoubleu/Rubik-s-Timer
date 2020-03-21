@@ -4,7 +4,7 @@ This is an improved version of my original [slap together timer](https://github.
 
 The front-end is made using ReactJS with some help from Bootstrap. Ajax was used to make API calls to a Flask server that takes and records times to a Mongo database. Graphing was done using Recharts and should update dynamically.
 
-To run, you simply need to run the command `num run dev` inside the client directory to start everything. You can also use docker-compose to run everything however you will need to make sure you have corsdisabled for it to function.
+To run, you simply need to run the command `npm run dev` inside the client directory to start everything in developement mode. You can also use docker-compose to run everything however you will need to make sure you have cors disabled for it to function. If you use docker-compose, by default the the project runs on localhost:5001. If you use `npm run dev` to start it, the app runs on localhost:3000.
 
 Start and stop the timer with spacebar. (The timer is setup in competition format, so be sure to hold it down until it turns green  before you start)
 
