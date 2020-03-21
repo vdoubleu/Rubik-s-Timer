@@ -3,6 +3,9 @@ from pymongo import MongoClient
 from pprint import pprint
 import logging
 import json
+import numpy as np
+from numpy.polynomial.polynomial import polyfit
+from unicodedata import numeric
 
 app = Flask(__name__)
 
@@ -86,9 +89,33 @@ def set_times():
    
     return jsonify({"data": new_times})
 
+@app.route('/getCBF/', methods=['GET'])
+def get_CBF():
+    @after_this_request
+    def add_header(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+
+    get_id = request.args["id"]
+    get_data = times_coll.find_one({"id":get_id})
+    times = get_data["time"]
+   
+    
+    x = np.array(list(range(1, len(times))))
+
+    timesInt = map(lambda x: float(x.encode('ascii')), times)
+
+    d, c, b, a = polyfit(np.concatenate(([0],x)), np.asarray(np.array(times), dtype=float), 3)
+
+    res = map(lambda x: (x, a*(x**3) + b*(x**2) + c*x + d), times)
+     
+    #app.logger.info(timesInt)
+
+    return jsonify({"data": "hi"})
+
 if __name__ == '__main__':
     client = MongoClient('localhost', 27017)
     times_coll = client.times_database.times_collection
 
     
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

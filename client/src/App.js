@@ -21,6 +21,7 @@ var userId = "defuser";
 function App() {
 const [times, setTimes] = useState([]);
 const [dispTimes, setDispTimes] = useState("");
+const [CBF, setCBF] = useState("");
 
 function sendTime(time){
   var URL = "http://127.0.0.1:5000/sendTime/";
@@ -54,6 +55,7 @@ function getTimes(){
          
          setTimes(res.adjtime);
          setDispTimes(dispOut);
+         //getCBF();
    }});
 }
 
@@ -93,6 +95,23 @@ function resetTimes(newTimes){
       success: function(data){
          //alert(data);
       }});
+}
+
+function getCBF(){
+   var URL = "http://127.0.0.1:5000/getCBF/";
+
+   $.ajax({
+      type: "GET",
+      url: URL,
+      data: {"id": userId},
+      success: function(data){
+         
+         var res = JSON.parse(JSON.stringify(data))
+ 
+
+         //alert(res.data)
+         //setCBF();
+   }});
 }
 
 function startTimer(){
