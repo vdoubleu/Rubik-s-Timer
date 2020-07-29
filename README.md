@@ -1,6 +1,6 @@
 # Rubik-s-Timer
 
-This timer is already old, outdated, and shouldn't even be looked at. A newer version of the app can be fonud [here](https://cube-timer-client.herokuapp.com/) and the code for it has been split up into two repositories. The client can be found [here](https://github.com/vdoubleu/cube-timer2-client) and the server can be found [here](https://github.com/vdoubleu/cube-timer2-server).
+This timer is already old, outdated, and shouldn't even be looked at. A newer version of the app can be found [here](https://cube-timer-client.herokuapp.com/) and the code for it has been split up into two repositories. The client can be found [here](https://github.com/vdoubleu/cube-timer2-client) and the server can be found [here](https://github.com/vdoubleu/cube-timer2-server).
 
 This is an improved version of my original [slap together timer](https://github.com/vdoubleu/slap-together-timer) and thus follows much the same philosophy. I wanted a simple Rubik's Cube timer that had a few features that I could not find anywhere else (without having to pay money). Most notably: start and stop using the spacebar, records solve times between sessions, graphing of the times, and multiple profiles for different cube types. I maintained all of these same functionalities from the original timer while keeping a simple and clean look. Some features such as line of best fit have not been brought over yet but there are plans to do so in the future.
 
